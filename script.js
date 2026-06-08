@@ -49,7 +49,7 @@ function generateCalculatorButtons(n) {
     if (i === 13) button.textContent = "x";
     if (i === 14) button.textContent = "÷";
     if (i === 15) button.textContent = "=";
-    if (i === 15) button.style.width = `${buttonContainer.offsetWidth - 10}px `;
+    if (i === 15) button.style.width = `${buttonContainer.offsetWidth - 8}px `;
     buttonContainer.appendChild(button);
   }
 }
@@ -59,3 +59,7 @@ const displayContainer = document.getElementById("display");
 const buttonContainer = document.getElementById("buttons");
 
 generateCalculatorButtons(16);
+
+// Placeholder for the display
+
+displayContainer.textContent = "123456";
