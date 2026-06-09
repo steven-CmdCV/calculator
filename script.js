@@ -97,20 +97,24 @@ let secondNumber = "";
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     if (button.textContent === "AC") {
+      // Clear the display and all variables
       displayContainer.textContent = "";
       firstNumber = "";
       operator = "";
       secondNumber = "";
       console.log(button.dataset.type);
     } else if (operator.length === 0 && button.dataset.type === "digit") {
+      // Update the firstNumber variable
       displayContainer.textContent += button.textContent;
       firstNumber += button.textContent;
       console.log(`First Number: ${firstNumber}`);
     } else if (button.dataset.type === "operator" && operator.length === 0) {
+      // Update the operator variable
       displayContainer.textContent += button.textContent;
       operator += button.textContent;
       console.log(`Operator: ${operator}`);
     } else if (operator.length > 0 && button.dataset.type === "digit") {
+      // Update the secondNumber variable
       displayContainer.textContent += button.textContent;
       secondNumber += button.textContent;
       console.log(`Second Number: ${secondNumber}`);
@@ -120,6 +124,8 @@ buttons.forEach((button) => {
         Number(firstNumber),
         Number(secondNumber),
       );
+      displayContainer.textContent = "";
+      displayContainer.textContent += operationResult;
       console.log(`Operation result: ${operationResult}`);
     }
   });
