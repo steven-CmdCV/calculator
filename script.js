@@ -19,16 +19,16 @@ function divide(a, b) {
 function operate(operator, a, b) {
   switch (operator) {
     case "+":
-      add(a, b);
+      return add(a, b);
       break;
     case "-":
-      subtract(a, b);
+      return subtract(a, b);
       break;
     case "x":
-      multiply(a, b);
+      return multiply(a, b);
       break;
     case "÷":
-      divide(a, b);
+      return divide(a, b);
       break;
     default:
       return "Please choose a valid operator";
