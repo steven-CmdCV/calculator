@@ -1,19 +1,19 @@
 // Operator functions
 
 function add(a, b) {
-  return a + b;
+  return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-  return a - b;
+  return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-  return a * b;
+  return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-  return a / b;
+  return Number(a) / Number(b);
 }
 
 function operate(operator, a, b) {
@@ -57,11 +57,11 @@ function generateCalculatorButtons(n) {
     }
     if (i === 11) {
       button.textContent = "+";
-      button.dataset.type = "digit";
+      button.dataset.type = "operator";
     }
     if (i === 12) {
       button.textContent = "-";
-      button.dataset.type = "digit";
+      button.dataset.type = "operator";
     }
     if (i === 13) {
       button.textContent = "x";
@@ -108,17 +108,30 @@ buttons.forEach((button) => {
       displayContainer.textContent += button.textContent;
       firstNumber += button.textContent;
       console.log(`First Number: ${firstNumber}`);
-    } else if (button.dataset.type === "operator" && operator.length === 0) {
+    } else if (button.dataset.type === "operator") {
+      // Only evaluate a pair of numbers at a time
+      if (operator.length > 0) {
+        console.log(`Operators > 0: ${operator}`);
+        operator = operator[operator.length - 1]; // Always get the last operator
+        firstNumber = operate(operator, firstNumber, secondNumber);
+        displayContainer.textContent = firstNumber;
+        secondNumber = "";
+      }
       // Update the operator variable
-      displayContainer.textContent += button.textContent;
+      //displayContainer.textContent += button.textContent;
       operator += button.textContent;
+
       console.log(`Operator: ${operator}`);
     } else if (operator.length > 0 && button.dataset.type === "digit") {
       // Update the secondNumber variable
+      displayContainer.textContent = "";
       displayContainer.textContent += button.textContent;
       secondNumber += button.textContent;
       console.log(`Second Number: ${secondNumber}`);
     } else if (button.dataset.type === "equals") {
+      console.log(
+        `Current operation: ${firstNumber} ${operator} ${secondNumber}`,
+      );
       let operationResult = operate(
         operator,
         Number(firstNumber),
