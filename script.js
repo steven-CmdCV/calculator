@@ -25,9 +25,11 @@ function operate(operator, a, b) {
     case "-":
       return subtract(a, b);
       break;
+    case "*":
     case "×":
       return multiply(a, b);
       break;
+    case "/":
     case "÷":
       return divide(a, b);
       break;
@@ -89,6 +91,10 @@ function generateCalculatorButtons(n) {
     }
     buttonContainer.appendChild(button);
   }
+}
+
+function isDigit(event) {
+  return event.key >= "0" && event.key <= "9";
 }
 
 const calcContainer = document.getElementById("container");
@@ -182,4 +188,74 @@ buttons.forEach((button) => {
       }
     }
   });
+});
+
+// Keyboard Support
+
+displayContainer.addEventListener("keydown", (event) => {
+  const operatorArray = ["+", "-", "*", "/"];
+
+  if (event.key === "Backspace") {
+    event.preventDefault();
+    if (firstNumber && !secondNumber) {
+      firstNumber = firstNumber.slice(0, -1);
+      displayContainer.value = firstNumber;
+    } else if (secondNumber) {
+      displayContainer.value = secondNumber;
+      secondNumber = secondNumber.slice(0, -1);
+    }
+  } else if (operator.length === 0 && isDigit(event)) {
+    firstNumber += event.key;
+    console.log(`First Number: ${firstNumber}`); // Delete after
+  } else if (operator.length > 0 && isDigit(event)) {
+    event.preventDefault();
+    displayContainer.value = secondNumber;
+    displayContainer.value += event.key;
+    secondNumber += event.key;
+    console.log(`Second Number: ${secondNumber}`); // Delete after
+  } else if (operatorArray.includes(event.key)) {
+    event.preventDefault();
+
+    if (operator.length > 0) {
+      operator += event.key;
+      console.log(`Current operator: ${operator[operator.length - 2]}`);
+      firstNumber = operate(
+        operator[operator.length - 2],
+        firstNumber,
+        secondNumber,
+      );
+      displayContainer.value = firstNumber;
+      secondNumber = "";
+    } else {
+      operator += event.key;
+    }
+
+    console.log(`Operator: ${operator}`); // Delete after
+  } else if (event.key === "=" || event.key === "Enter") {
+    event.preventDefault();
+
+    console.log(
+      `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
+    ); // Delete after
+    let operationResult = operate(
+      operator[operator.length - 1],
+      Number(firstNumber),
+      Number(secondNumber),
+    );
+    displayContainer.value = "";
+    displayContainer.value += operationResult;
+    console.log(`Operation result: ${operationResult}`); // Delete after
+  } else if (event.key === ".") {
+    event.preventDefault();
+
+    if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
+      displayContainer.value += event.key;
+      firstNumber += event.key;
+      console.log(`First Number: ${firstNumber}`); // Delete after
+    } else if (secondNumber && !secondNumber.includes(".")) {
+      displayContainer.value += event.key;
+      secondNumber += event.key;
+      console.log(`Second Number: ${secondNumber}`); // Delete after
+    }
+  }
 });
