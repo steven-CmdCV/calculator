@@ -140,7 +140,7 @@ buttons.forEach((button) => {
       console.log(`Second Number: ${secondNumber}`); // Delete after
     } else if (button.dataset.type === "equals") {
       console.log(
-        `Current operation: ${firstNumber} ${operator} ${secondNumber}`,
+        `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
       ); // Delete after
       let operationResult = operate(
         operator[operator.length - 1], // Here we need the last operator in the operator string
@@ -151,13 +151,16 @@ buttons.forEach((button) => {
       displayContainer.textContent += operationResult;
       console.log(`Operation result: ${operationResult}`); // Delete after
     } else if (button.dataset.type === "decimal") {
-      displayContainer.textContent += button.textContent;
+      //Decimal support
 
-      if (firstNumber && !secondNumber) {
+      // Check if we're adding to the firstNumber or secondNumber and then update that variable
+      if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
+        displayContainer.textContent += button.textContent;
         firstNumber += button.textContent;
         console.log(`First Number: ${firstNumber}`); // Delete after
       }
-      if (secondNumber) {
+      if (secondNumber && !secondNumber.includes(".")) {
+        displayContainer.textContent += button.textContent;
         secondNumber += button.textContent;
         console.log(`Second Number: ${secondNumber}`); // Delete after
       }
