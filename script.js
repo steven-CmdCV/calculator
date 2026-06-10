@@ -109,14 +109,14 @@ buttons.forEach((button) => {
   button.addEventListener("click", () => {
     if (button.textContent === "AC") {
       // Clear the display and all variables
-      displayContainer.textContent = "";
+      displayContainer.value = "";
       firstNumber = "";
       operator = "";
       secondNumber = "";
       console.log(button.dataset.type); // Delete after
     } else if (operator.length === 0 && button.dataset.type === "digit") {
       // Update the firstNumber variable
-      displayContainer.textContent += button.textContent;
+      displayContainer.value += button.textContent;
       firstNumber += button.textContent;
       console.log(`First Number: ${firstNumber}`); // Delete after
     } else if (button.dataset.type === "operator") {
@@ -129,7 +129,7 @@ buttons.forEach((button) => {
           firstNumber,
           secondNumber,
         );
-        displayContainer.textContent = firstNumber;
+        displayContainer.value = firstNumber;
         secondNumber = "";
       } else {
         operator += button.textContent;
@@ -138,8 +138,8 @@ buttons.forEach((button) => {
       console.log(`Operator: ${operator}`); // Delete after
     } else if (operator.length > 0 && button.dataset.type === "digit") {
       // Update the secondNumber variable
-      displayContainer.textContent = secondNumber;
-      displayContainer.textContent += button.textContent;
+      displayContainer.value = secondNumber;
+      displayContainer.value += button.textContent;
       secondNumber += button.textContent;
       console.log(`Second Number: ${secondNumber}`); // Delete after
     } else if (button.dataset.type === "equals") {
@@ -151,19 +151,19 @@ buttons.forEach((button) => {
         Number(firstNumber),
         Number(secondNumber),
       );
-      displayContainer.textContent = "";
-      displayContainer.textContent += operationResult;
+      displayContainer.value = "";
+      displayContainer.value += operationResult;
       console.log(`Operation result: ${operationResult}`); // Delete after
     } else if (button.dataset.type === "decimal") {
       // Decimal support
 
       // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
       if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
-        displayContainer.textContent += button.textContent;
+        displayContainer.value += button.textContent;
         firstNumber += button.textContent;
         console.log(`First Number: ${firstNumber}`); // Delete after
       } else if (secondNumber && !secondNumber.includes(".")) {
-        displayContainer.textContent += button.textContent;
+        displayContainer.value += button.textContent;
         secondNumber += button.textContent;
         console.log(`Second Number: ${secondNumber}`); // Delete after
       }
@@ -173,11 +173,11 @@ buttons.forEach((button) => {
       // Check if we're removing from firstNumber or secondNumber and then update the variable and display
       if (firstNumber && !secondNumber) {
         firstNumber = firstNumber.slice(0, -1); // Remove the last character
-        displayContainer.textContent = firstNumber;
+        displayContainer.value = firstNumber;
         console.log(`First Number: ${firstNumber}`); // Delete after
       } else if (secondNumber) {
         secondNumber = secondNumber.slice(0, -1); // Remove the last character
-        displayContainer.textContent = secondNumber;
+        displayContainer.value = secondNumber;
         console.log(`Second Number: ${secondNumber}`);
       }
     }

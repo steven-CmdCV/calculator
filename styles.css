@@ -38,6 +38,7 @@ body {
   display: flex;
   justify-content: end;
   align-items: end;
+  text-align: right;
   padding: 4px;
   width: 335px;
   height: 60px;
