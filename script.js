@@ -111,15 +111,18 @@ buttons.forEach((button) => {
     } else if (button.dataset.type === "operator") {
       // Only evaluate a pair of numbers at a time
       if (operator.length > 0) {
-        console.log(`Operators > 0: ${operator}`);
-        operator = operator[operator.length - 1]; // Always get the last operator
-        firstNumber = operate(operator, firstNumber, secondNumber);
+        operator += button.textContent;
+        console.log(`Current operator: ${operator[operator.length - 2]}`);
+        firstNumber = operate(
+          operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
+          firstNumber,
+          secondNumber,
+        );
         displayContainer.textContent = firstNumber;
         secondNumber = "";
+      } else {
+        operator += button.textContent;
       }
-      // Update the operator variable
-      //displayContainer.textContent += button.textContent;
-      operator += button.textContent;
 
       console.log(`Operator: ${operator}`);
     } else if (operator.length > 0 && button.dataset.type === "digit") {
@@ -133,7 +136,7 @@ buttons.forEach((button) => {
         `Current operation: ${firstNumber} ${operator} ${secondNumber}`,
       );
       let operationResult = operate(
-        operator,
+        operator[operator.length - 1], // Here we need the last operator in the operator string
         Number(firstNumber),
         Number(secondNumber),
       );
