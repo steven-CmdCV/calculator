@@ -109,17 +109,17 @@ buttons.forEach((button) => {
       firstNumber = "";
       operator = "";
       secondNumber = "";
-      console.log(button.dataset.type);
+      console.log(button.dataset.type); // Delete after
     } else if (operator.length === 0 && button.dataset.type === "digit") {
       // Update the firstNumber variable
       displayContainer.textContent += button.textContent;
       firstNumber += button.textContent;
-      console.log(`First Number: ${firstNumber}`);
+      console.log(`First Number: ${firstNumber}`); // Delete after
     } else if (button.dataset.type === "operator") {
       // Only evaluate a pair of numbers at a time
       if (operator.length > 0) {
         operator += button.textContent;
-        console.log(`Current operator: ${operator[operator.length - 2]}`);
+        console.log(`Current operator: ${operator[operator.length - 2]}`); // Delete after
         firstNumber = operate(
           operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
           firstNumber,
@@ -131,17 +131,17 @@ buttons.forEach((button) => {
         operator += button.textContent;
       }
 
-      console.log(`Operator: ${operator}`);
+      console.log(`Operator: ${operator}`); // Delete after
     } else if (operator.length > 0 && button.dataset.type === "digit") {
       // Update the secondNumber variable
-      displayContainer.textContent = "";
+      displayContainer.textContent = ""; // FIX
       displayContainer.textContent += button.textContent;
       secondNumber += button.textContent;
-      console.log(`Second Number: ${secondNumber}`);
+      console.log(`Second Number: ${secondNumber}`); // Delete after
     } else if (button.dataset.type === "equals") {
       console.log(
         `Current operation: ${firstNumber} ${operator} ${secondNumber}`,
-      );
+      ); // Delete after
       let operationResult = operate(
         operator[operator.length - 1], // Here we need the last operator in the operator string
         Number(firstNumber),
@@ -149,7 +149,18 @@ buttons.forEach((button) => {
       );
       displayContainer.textContent = "";
       displayContainer.textContent += operationResult;
-      console.log(`Operation result: ${operationResult}`);
+      console.log(`Operation result: ${operationResult}`); // Delete after
+    } else if (button.dataset.type === "decimal") {
+      displayContainer.textContent += button.textContent;
+
+      if (firstNumber && !secondNumber) {
+        firstNumber += button.textContent;
+        console.log(`First Number: ${firstNumber}`); // Delete after
+      }
+      if (secondNumber) {
+        secondNumber += button.textContent;
+        console.log(`Second Number: ${secondNumber}`); // Delete after
+      }
     }
   });
 });
