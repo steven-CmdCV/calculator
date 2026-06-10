@@ -25,14 +25,14 @@ function operate(operator, a, b) {
     case "-":
       return subtract(a, b);
       break;
-    case "x":
+    case "×":
       return multiply(a, b);
       break;
     case "÷":
       return divide(a, b);
       break;
     default:
-      return "Please choose a valid operator";
+      return "ERROR!";
   }
 }
 
@@ -45,41 +45,45 @@ function generateCalculatorButtons(n) {
       button.textContent = "AC";
       button.dataset.type = "clear";
     }
+    if (i === 1) {
+      button.textContent = "⌫";
+      button.dataset.type = "backspace";
+    }
     // Generate digit buttons
-    if (i > 0 && i < 10) {
-      button.textContent = i;
+    if (i > 1 && i < 11) {
+      button.textContent = i - 1;
       button.dataset.type = "digit";
     }
-    if (i === 10) {
+    if (i === 11) {
       button.textContent = "0";
       button.dataset.type = "digit";
     }
     // Generate operator buttons and style them
-    if (i > 10 || i === 0) {
+    if (i > 11 || i === 0 || i === 1) {
       button.style.backgroundColor = "#FF9500";
     }
-    if (i === 11) {
+    if (i === 12) {
       button.textContent = "+";
       button.dataset.type = "operator";
     }
-    if (i === 12) {
+    if (i === 13) {
       button.textContent = "-";
       button.dataset.type = "operator";
     }
-    if (i === 13) {
-      button.textContent = "x";
-      button.dataset.type = "operator";
-    }
     if (i === 14) {
-      button.textContent = "÷";
+      button.textContent = "×";
       button.dataset.type = "operator";
     }
     if (i === 15) {
+      button.textContent = "÷";
+      button.dataset.type = "operator";
+    }
+    if (i === 16) {
       button.textContent = ".";
       button.dataset.type = "decimal";
     }
-    if (i === 16) {
-      button.style.width = "233px";
+    if (i === 17) {
+      //button.style.width = "233px";
       button.textContent = "=";
       button.dataset.type = "equals";
     }
@@ -91,7 +95,7 @@ const calcContainer = document.getElementById("container");
 const displayContainer = document.getElementById("display");
 const buttonContainer = document.getElementById("buttons");
 
-generateCalculatorButtons(17);
+generateCalculatorButtons(18);
 
 // Button functionality
 
@@ -151,18 +155,30 @@ buttons.forEach((button) => {
       displayContainer.textContent += operationResult;
       console.log(`Operation result: ${operationResult}`); // Delete after
     } else if (button.dataset.type === "decimal") {
-      //Decimal support
+      // Decimal support
 
-      // Check if we're adding to the firstNumber or secondNumber and then update that variable
+      // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
       if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
         displayContainer.textContent += button.textContent;
         firstNumber += button.textContent;
         console.log(`First Number: ${firstNumber}`); // Delete after
-      }
-      if (secondNumber && !secondNumber.includes(".")) {
+      } else if (secondNumber && !secondNumber.includes(".")) {
         displayContainer.textContent += button.textContent;
         secondNumber += button.textContent;
         console.log(`Second Number: ${secondNumber}`); // Delete after
+      }
+    } else if (button.dataset.type === "backspace") {
+      // Backspace support
+
+      // Check if we're removing from firstNumber or secondNumber and then update the variable and display
+      if (firstNumber && !secondNumber) {
+        firstNumber = firstNumber.slice(0, -1); // Remove the last character
+        displayContainer.textContent = firstNumber;
+        console.log(`First Number: ${firstNumber}`); // Delete after
+      } else if (secondNumber) {
+        secondNumber = secondNumber.slice(0, -1); // Remove the last character
+        displayContainer.textContent = secondNumber;
+        console.log(`Second Number: ${secondNumber}`);
       }
     }
   });
