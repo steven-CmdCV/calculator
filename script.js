@@ -45,6 +45,7 @@ function generateCalculatorButtons(n) {
       button.textContent = "AC";
       button.dataset.type = "clear";
     }
+    // Generate digit buttons
     if (i > 0 && i < 10) {
       button.textContent = i;
       button.dataset.type = "digit";
@@ -53,6 +54,7 @@ function generateCalculatorButtons(n) {
       button.textContent = "0";
       button.dataset.type = "digit";
     }
+    // Generate operator buttons and style them
     if (i > 10 || i === 0) {
       button.style.backgroundColor = "#FF9500";
     }
@@ -73,7 +75,11 @@ function generateCalculatorButtons(n) {
       button.dataset.type = "operator";
     }
     if (i === 15) {
-      button.style.width = `${buttonContainer.offsetWidth - 8}px `;
+      button.textContent = ".";
+      button.dataset.type = "decimal";
+    }
+    if (i === 16) {
+      button.style.width = "233px";
       button.textContent = "=";
       button.dataset.type = "equals";
     }
@@ -85,7 +91,7 @@ const calcContainer = document.getElementById("container");
 const displayContainer = document.getElementById("display");
 const buttonContainer = document.getElementById("buttons");
 
-generateCalculatorButtons(16);
+generateCalculatorButtons(17);
 
 // Button functionality
 
