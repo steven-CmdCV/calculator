@@ -13,7 +13,8 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  return Number(a) / Number(b);
+  if (b === 0) return "ERROR!";
+  return (Number(a) / Number(b)).toFixed(4);
 }
 
 function operate(operator, a, b) {
