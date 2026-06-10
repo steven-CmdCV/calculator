@@ -134,7 +134,7 @@ buttons.forEach((button) => {
       console.log(`Operator: ${operator}`); // Delete after
     } else if (operator.length > 0 && button.dataset.type === "digit") {
       // Update the secondNumber variable
-      displayContainer.textContent = ""; // FIX
+      displayContainer.textContent = secondNumber;
       displayContainer.textContent += button.textContent;
       secondNumber += button.textContent;
       console.log(`Second Number: ${secondNumber}`); // Delete after
