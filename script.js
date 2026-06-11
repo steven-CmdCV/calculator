@@ -94,7 +94,7 @@ function generateCalculatorButtons(n) {
 }
 
 function isDigit(event) {
-  return event.key >= "0" && event.key <= "9";
+  return event >= "0" && event <= "9";
 }
 
 const calcContainer = document.getElementById("container");
@@ -195,6 +195,20 @@ buttons.forEach((button) => {
 displayContainer.addEventListener("keydown", (event) => {
   const operatorArray = ["+", "-", "*", "/"];
 
+  // Reject invalid keys
+  if (
+    !isDigit(event.key) &&
+    !operatorArray.includes(event.key) &&
+    event.key != "Backspace" &&
+    event.key != "Enter" &&
+    event.key != "=" &&
+    event.key != "."
+  ) {
+    console.log(`Invalid Key: ${event.key}`); // Delete after
+    event.preventDefault();
+    return;
+  }
+
   if (event.key === "Backspace") {
     event.preventDefault();
     if (firstNumber && !secondNumber) {
@@ -204,10 +218,10 @@ displayContainer.addEventListener("keydown", (event) => {
       displayContainer.value = secondNumber;
       secondNumber = secondNumber.slice(0, -1);
     }
-  } else if (operator.length === 0 && isDigit(event)) {
+  } else if (operator.length === 0 && isDigit(event.key)) {
     firstNumber += event.key;
     console.log(`First Number: ${firstNumber}`); // Delete after
-  } else if (operator.length > 0 && isDigit(event)) {
+  } else if (operator.length > 0 && isDigit(event.key)) {
     event.preventDefault();
     displayContainer.value = secondNumber;
     displayContainer.value += event.key;
