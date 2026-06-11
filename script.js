@@ -126,6 +126,7 @@ buttons.forEach((button) => {
       firstNumber += button.textContent;
       console.log(`First Number: ${firstNumber}`); // Delete after
     } else if (button.dataset.type === "operator") {
+      if (!firstNumber) return; // Make sure user inputs a number before an operator
       // Only evaluate a pair of numbers at a time
       if (operator.length > 0) {
         operator += button.textContent;
@@ -232,6 +233,7 @@ displayContainer.addEventListener("keydown", (event) => {
     console.log(`Second Number: ${secondNumber}`); // Delete after
   } else if (operatorArray.includes(event.key)) {
     event.preventDefault();
+    if (!firstNumber) return; // Make sure user inputs a number before an operator
 
     if (operator.length > 0) {
       operator += event.key;
