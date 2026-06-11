@@ -178,11 +178,11 @@ buttons.forEach((button) => {
 
       // Check if we're removing from firstNumber or secondNumber and then update the variable and display
       if (firstNumber && !secondNumber) {
-        firstNumber = firstNumber.slice(0, -1); // Remove the last character
+        firstNumber = firstNumber.toString().slice(0, -1); // Remove the last character
         displayContainer.value = firstNumber;
         console.log(`First Number: ${firstNumber}`); // Delete after
       } else if (secondNumber) {
-        secondNumber = secondNumber.slice(0, -1); // Remove the last character
+        secondNumber = secondNumber.toString().slice(0, -1); // Remove the last character
         displayContainer.value = secondNumber;
         console.log(`Second Number: ${secondNumber}`);
       }
@@ -212,11 +212,14 @@ displayContainer.addEventListener("keydown", (event) => {
   if (event.key === "Backspace") {
     event.preventDefault();
     if (firstNumber && !secondNumber) {
-      firstNumber = firstNumber.slice(0, -1);
+      console.log(
+        `Slice firstNumber: ${firstNumber} Type: ${typeof firstNumber}`,
+      ); // Delete after
+      firstNumber = firstNumber.toString().slice(0, -1);
       displayContainer.value = firstNumber;
     } else if (secondNumber) {
+      secondNumber = secondNumber.toString().slice(0, -1);
       displayContainer.value = secondNumber;
-      secondNumber = secondNumber.slice(0, -1);
     }
   } else if (operator.length === 0 && isDigit(event.key)) {
     firstNumber += event.key;
