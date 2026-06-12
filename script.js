@@ -97,6 +97,94 @@ function isDigit(event) {
   return event >= "0" && event <= "9";
 }
 
+function handleClear() {
+  // Clear the display and all variables
+  displayContainer.value = "";
+  firstNumber = "";
+  operator = "";
+  secondNumber = "";
+}
+
+function handleOperator(button) {
+  if (!firstNumber) return; // Make sure user inputs a number before an operator
+
+  // Only evaluate a pair of numbers at a time
+  if (operator.length > 0) {
+    operator += button.textContent;
+    console.log(`Current operator: ${operator[operator.length - 2]}`); // Delete after
+    firstNumber = operate(
+      operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
+      firstNumber,
+      secondNumber,
+    );
+    displayContainer.value = firstNumber;
+    secondNumber = "";
+  } else {
+    operator += button.textContent;
+  }
+}
+
+function handleDigit(button) {
+  if (operator.length === 0) {
+    // Update the firstNumber variable
+    displayContainer.value += button.textContent;
+    firstNumber += button.textContent;
+    console.log(`First Number: ${firstNumber}`); // Delete after
+  } else if (operator.length > 0) {
+    // Update the secondNumber variable
+    displayContainer.value = secondNumber;
+    displayContainer.value += button.textContent;
+    secondNumber += button.textContent;
+    console.log(`Second Number: ${secondNumber}`); // Delete after
+  }
+}
+
+function handleDecimal(button) {
+  // Decimal support
+
+  // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
+  if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
+    displayContainer.value += button.textContent;
+    firstNumber += button.textContent;
+    console.log(`First Number: ${firstNumber}`); // Delete after
+  } else if (secondNumber && !secondNumber.includes(".")) {
+    displayContainer.value += button.textContent;
+    secondNumber += button.textContent;
+    console.log(`Second Number: ${secondNumber}`); // Delete after
+  }
+}
+
+function handleBackspace() {
+  // Backspace support
+
+  // Check if we're removing from firstNumber or secondNumber and then update the variable and display
+  if (firstNumber && !secondNumber) {
+    firstNumber = firstNumber.toString().slice(0, -1); // Remove the last character
+    displayContainer.value = firstNumber;
+    console.log(`First Number: ${firstNumber}`); // Delete after
+  } else if (secondNumber) {
+    secondNumber = secondNumber.toString().slice(0, -1); // Remove the last character
+    displayContainer.value = secondNumber;
+    console.log(`Second Number: ${secondNumber}`);
+  }
+}
+
+function handleEquals() {
+  console.log(
+    `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
+  ); // Delete after
+
+  let operationResult = operate(
+    operator[operator.length - 1], // Here we need the last operator in the operator string
+    Number(firstNumber),
+    Number(secondNumber),
+  );
+
+  displayContainer.value = "";
+  displayContainer.value += operationResult;
+  console.log(`Operation result: ${operationResult}`); // Delete after
+}
+
 const calcContainer = document.getElementById("container");
 const displayContainer = document.getElementById("display");
 const buttonContainer = document.getElementById("buttons");
@@ -113,80 +201,29 @@ let secondNumber = "";
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (button.textContent === "AC") {
-      // Clear the display and all variables
-      displayContainer.value = "";
-      firstNumber = "";
-      operator = "";
-      secondNumber = "";
-      console.log(button.dataset.type); // Delete after
-    } else if (operator.length === 0 && button.dataset.type === "digit") {
-      // Update the firstNumber variable
-      displayContainer.value += button.textContent;
-      firstNumber += button.textContent;
-      console.log(`First Number: ${firstNumber}`); // Delete after
-    } else if (button.dataset.type === "operator") {
-      if (!firstNumber) return; // Make sure user inputs a number before an operator
-      // Only evaluate a pair of numbers at a time
-      if (operator.length > 0) {
-        operator += button.textContent;
-        console.log(`Current operator: ${operator[operator.length - 2]}`); // Delete after
-        firstNumber = operate(
-          operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
-          firstNumber,
-          secondNumber,
-        );
-        displayContainer.value = firstNumber;
-        secondNumber = "";
-      } else {
-        operator += button.textContent;
-      }
-
-      console.log(`Operator: ${operator}`); // Delete after
-    } else if (operator.length > 0 && button.dataset.type === "digit") {
-      // Update the secondNumber variable
-      displayContainer.value = secondNumber;
-      displayContainer.value += button.textContent;
-      secondNumber += button.textContent;
-      console.log(`Second Number: ${secondNumber}`); // Delete after
-    } else if (button.dataset.type === "equals") {
-      console.log(
-        `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
-      ); // Delete after
-      let operationResult = operate(
-        operator[operator.length - 1], // Here we need the last operator in the operator string
-        Number(firstNumber),
-        Number(secondNumber),
-      );
-      displayContainer.value = "";
-      displayContainer.value += operationResult;
-      console.log(`Operation result: ${operationResult}`); // Delete after
-    } else if (button.dataset.type === "decimal") {
-      // Decimal support
-
-      // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
-      if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
-        displayContainer.value += button.textContent;
-        firstNumber += button.textContent;
-        console.log(`First Number: ${firstNumber}`); // Delete after
-      } else if (secondNumber && !secondNumber.includes(".")) {
-        displayContainer.value += button.textContent;
-        secondNumber += button.textContent;
-        console.log(`Second Number: ${secondNumber}`); // Delete after
-      }
-    } else if (button.dataset.type === "backspace") {
-      // Backspace support
-
-      // Check if we're removing from firstNumber or secondNumber and then update the variable and display
-      if (firstNumber && !secondNumber) {
-        firstNumber = firstNumber.toString().slice(0, -1); // Remove the last character
-        displayContainer.value = firstNumber;
-        console.log(`First Number: ${firstNumber}`); // Delete after
-      } else if (secondNumber) {
-        secondNumber = secondNumber.toString().slice(0, -1); // Remove the last character
-        displayContainer.value = secondNumber;
-        console.log(`Second Number: ${secondNumber}`);
-      }
+    switch (button.dataset.type) {
+      case "clear":
+        handleClear();
+        console.log(button.dataset.type); // Delete after
+        break;
+      case "digit":
+        handleDigit(button);
+        break;
+      case "operator":
+        handleOperator(button);
+        console.log(`Operator: ${operator}`); // Delete after
+        break;
+      case "equals":
+        handleEquals();
+        break;
+      case "decimal":
+        handleDecimal(button);
+        break;
+      case "backspace":
+        handleBackspace();
+        break;
+      default:
+        return;
     }
   });
 });
