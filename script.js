@@ -243,3 +243,27 @@ displayContainer.addEventListener("keydown", (event) => {
     handleDecimal(event.key);
   }
 });
+
+// Hover effect for buttons
+buttons.forEach((button) => {
+  button.addEventListener("mouseenter", () => {
+    button.style.backgroundColor = "#000000";
+  });
+
+  button.addEventListener("mouseleave", () => {
+    switch (button.dataset.type) {
+      case "clear":
+      case "backspace":
+      case "operator":
+      case "equals":
+      case "decimal":
+        button.style.backgroundColor = "#FF9500";
+        break;
+      case "digit":
+        button.style.backgroundColor = "#2d2d44";
+        break;
+      default:
+        return;
+    }
+  });
+});
