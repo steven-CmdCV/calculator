@@ -146,10 +146,13 @@ function handleBackspace() {
   // Check if we're removing from firstNumber or secondNumber
   // and then update the variable and display
   if (firstNumber && !secondNumber) {
-    firstNumber = firstNumber.toString().slice(0, -1); // Remove the last character
+    // Clear the firstNumber and operator to prevent
+    // issues with later operations
+    firstNumber = "";
+    operator = "";
     displayContainer.value = firstNumber;
   } else if (secondNumber) {
-    secondNumber = secondNumber.toString().slice(0, -1); // Remove the last character
+    secondNumber = "";
     displayContainer.value = secondNumber;
   }
 }
@@ -163,6 +166,8 @@ function handleEquals() {
 
   displayContainer.value = "";
   displayContainer.value += operationResult;
+  firstNumber = operationResult;
+  secondNumber = "";
 }
 
 function isDigit(value) {
