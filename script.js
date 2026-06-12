@@ -37,7 +37,7 @@ function operate(operator, a, b) {
   }
 }
 
-// Calculator buttons
+// Calculator buttons and display
 function generateCalculatorButtons(n) {
   for (let i = 0; i < n; i++) {
     const button = document.createElement("button");
@@ -90,6 +90,10 @@ function generateCalculatorButtons(n) {
   }
 }
 
+function setDisplayValue(value) {
+  displayContainer.value = value;
+}
+
 // Handle button/key functions
 function handleClear() {
   // Clear the display and all variables
@@ -97,6 +101,7 @@ function handleClear() {
   firstNumber = "";
   operator = "";
   secondNumber = "";
+  setDisplayValue(initialDisplayValue);
 }
 
 function handleOperator(value) {
@@ -118,6 +123,10 @@ function handleOperator(value) {
 }
 
 function handleDigit(value) {
+  if (!firstNumber) setDisplayValue(initialDisplayValue);
+  if (displayContainer.value === initialDisplayValue)
+    displayContainer.value = "";
+
   if (operator.length === 0) {
     // Update the firstNumber variable
     displayContainer.value += value;
@@ -150,7 +159,7 @@ function handleBackspace() {
     // issues with later operations
     firstNumber = "";
     operator = "";
-    displayContainer.value = firstNumber;
+    setDisplayValue(initialDisplayValue);
   } else if (secondNumber) {
     secondNumber = "";
     displayContainer.value = secondNumber;
@@ -186,6 +195,9 @@ const buttons = buttonContainer.querySelectorAll("button");
 let firstNumber = "";
 let operator = "";
 let secondNumber = "";
+const initialDisplayValue = "0";
+
+setDisplayValue(initialDisplayValue);
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
