@@ -1,5 +1,4 @@
 // Operator functions
-
 function add(a, b) {
   return Number(a) + Number(b);
 }
@@ -39,7 +38,6 @@ function operate(operator, a, b) {
 }
 
 // Calculator buttons
-
 function generateCalculatorButtons(n) {
   for (let i = 0; i < n; i++) {
     const button = document.createElement("button");
@@ -85,7 +83,6 @@ function generateCalculatorButtons(n) {
       button.dataset.type = "decimal";
     }
     if (i === 17) {
-      //button.style.width = "233px";
       button.textContent = "=";
       button.dataset.type = "equals";
     }
@@ -93,6 +90,7 @@ function generateCalculatorButtons(n) {
   }
 }
 
+// Handle button/key functions
 function handleClear() {
   // Clear the display and all variables
   displayContainer.value = "";
@@ -107,7 +105,6 @@ function handleOperator(value) {
   // Only evaluate a pair of numbers at a time
   if (operator.length > 0) {
     operator += value;
-    console.log(`Current operator: ${operator[operator.length - 2]}`); // Delete after
     firstNumber = operate(
       operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
       firstNumber,
@@ -125,51 +122,39 @@ function handleDigit(value) {
     // Update the firstNumber variable
     displayContainer.value += value;
     firstNumber += value;
-    console.log(`First Number: ${firstNumber}`); // Delete after
   } else if (operator.length > 0) {
     // Update the secondNumber variable
     displayContainer.value = secondNumber;
     displayContainer.value += value;
     secondNumber += value;
-    console.log(`Second Number: ${secondNumber}`); // Delete after
   }
 }
 
 function handleDecimal(value) {
-  // Decimal support
-
-  // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
+  // Check if we're adding the decimal to the firstNumber or secondNumber
+  // and then update the variable and display
   if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
     displayContainer.value += value;
     firstNumber += value;
-    console.log(`First Number: ${firstNumber}`); // Delete after
   } else if (secondNumber && !secondNumber.includes(".")) {
     displayContainer.value += value;
     secondNumber += value;
-    console.log(`Second Number: ${secondNumber}`); // Delete after
   }
 }
 
 function handleBackspace() {
-  // Backspace support
-
-  // Check if we're removing from firstNumber or secondNumber and then update the variable and display
+  // Check if we're removing from firstNumber or secondNumber
+  // and then update the variable and display
   if (firstNumber && !secondNumber) {
     firstNumber = firstNumber.toString().slice(0, -1); // Remove the last character
     displayContainer.value = firstNumber;
-    console.log(`First Number: ${firstNumber}`); // Delete after
   } else if (secondNumber) {
     secondNumber = secondNumber.toString().slice(0, -1); // Remove the last character
     displayContainer.value = secondNumber;
-    console.log(`Second Number: ${secondNumber}`);
   }
 }
 
 function handleEquals() {
-  console.log(
-    `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
-  ); // Delete after
-
   let operationResult = operate(
     operator[operator.length - 1], // Here we need the last operator in the operator string
     Number(firstNumber),
@@ -178,7 +163,6 @@ function handleEquals() {
 
   displayContainer.value = "";
   displayContainer.value += operationResult;
-  console.log(`Operation result: ${operationResult}`); // Delete after
 }
 
 function isDigit(value) {
@@ -192,7 +176,6 @@ const buttonContainer = document.getElementById("buttons");
 generateCalculatorButtons(18);
 
 // Button Support
-
 const buttons = buttonContainer.querySelectorAll("button");
 
 let firstNumber = "";
@@ -204,14 +187,12 @@ buttons.forEach((button) => {
     switch (button.dataset.type) {
       case "clear":
         handleClear();
-        console.log(button.dataset.type); // Delete after
         break;
       case "digit":
         handleDigit(button.textContent);
         break;
       case "operator":
         handleOperator(button.textContent);
-        console.log(`Operator: ${operator}`); // Delete after
         break;
       case "equals":
         handleEquals();
@@ -229,7 +210,6 @@ buttons.forEach((button) => {
 });
 
 // Keyboard Support
-
 displayContainer.addEventListener("keydown", (event) => {
   const operatorArray = ["+", "-", "*", "/"];
 
@@ -242,7 +222,6 @@ displayContainer.addEventListener("keydown", (event) => {
     event.key != "=" &&
     event.key != "."
   ) {
-    console.log(`Invalid Key: ${event.key}`); // Delete after
     event.preventDefault();
     return;
   }
