@@ -93,10 +93,6 @@ function generateCalculatorButtons(n) {
   }
 }
 
-function isDigit(event) {
-  return event >= "0" && event <= "9";
-}
-
 function handleClear() {
   // Clear the display and all variables
   displayContainer.value = "";
@@ -105,12 +101,12 @@ function handleClear() {
   secondNumber = "";
 }
 
-function handleOperator(button) {
+function handleOperator(value) {
   if (!firstNumber) return; // Make sure user inputs a number before an operator
 
   // Only evaluate a pair of numbers at a time
   if (operator.length > 0) {
-    operator += button.textContent;
+    operator += value;
     console.log(`Current operator: ${operator[operator.length - 2]}`); // Delete after
     firstNumber = operate(
       operator[operator.length - 2], // Here we need the previous/penultimate operator in the operator string
@@ -120,36 +116,36 @@ function handleOperator(button) {
     displayContainer.value = firstNumber;
     secondNumber = "";
   } else {
-    operator += button.textContent;
+    operator += value;
   }
 }
 
-function handleDigit(button) {
+function handleDigit(value) {
   if (operator.length === 0) {
     // Update the firstNumber variable
-    displayContainer.value += button.textContent;
-    firstNumber += button.textContent;
+    displayContainer.value += value;
+    firstNumber += value;
     console.log(`First Number: ${firstNumber}`); // Delete after
   } else if (operator.length > 0) {
     // Update the secondNumber variable
     displayContainer.value = secondNumber;
-    displayContainer.value += button.textContent;
-    secondNumber += button.textContent;
+    displayContainer.value += value;
+    secondNumber += value;
     console.log(`Second Number: ${secondNumber}`); // Delete after
   }
 }
 
-function handleDecimal(button) {
+function handleDecimal(value) {
   // Decimal support
 
   // Check if we're adding to the firstNumber or secondNumber and then update the variable and display
   if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
-    displayContainer.value += button.textContent;
-    firstNumber += button.textContent;
+    displayContainer.value += value;
+    firstNumber += value;
     console.log(`First Number: ${firstNumber}`); // Delete after
   } else if (secondNumber && !secondNumber.includes(".")) {
-    displayContainer.value += button.textContent;
-    secondNumber += button.textContent;
+    displayContainer.value += value;
+    secondNumber += value;
     console.log(`Second Number: ${secondNumber}`); // Delete after
   }
 }
@@ -185,13 +181,17 @@ function handleEquals() {
   console.log(`Operation result: ${operationResult}`); // Delete after
 }
 
+function isDigit(value) {
+  return value >= "0" && value <= "9";
+}
+
 const calcContainer = document.getElementById("container");
 const displayContainer = document.getElementById("display");
 const buttonContainer = document.getElementById("buttons");
 
 generateCalculatorButtons(18);
 
-// Button functionality
+// Button Support
 
 const buttons = buttonContainer.querySelectorAll("button");
 
@@ -207,17 +207,17 @@ buttons.forEach((button) => {
         console.log(button.dataset.type); // Delete after
         break;
       case "digit":
-        handleDigit(button);
+        handleDigit(button.textContent);
         break;
       case "operator":
-        handleOperator(button);
+        handleOperator(button.textContent);
         console.log(`Operator: ${operator}`); // Delete after
         break;
       case "equals":
         handleEquals();
         break;
       case "decimal":
-        handleDecimal(button);
+        handleDecimal(button.textContent);
         break;
       case "backspace":
         handleBackspace();
@@ -249,69 +249,18 @@ displayContainer.addEventListener("keydown", (event) => {
 
   if (event.key === "Backspace") {
     event.preventDefault();
-    if (firstNumber && !secondNumber) {
-      console.log(
-        `Slice firstNumber: ${firstNumber} Type: ${typeof firstNumber}`,
-      ); // Delete after
-      firstNumber = firstNumber.toString().slice(0, -1);
-      displayContainer.value = firstNumber;
-    } else if (secondNumber) {
-      secondNumber = secondNumber.toString().slice(0, -1);
-      displayContainer.value = secondNumber;
-    }
-  } else if (operator.length === 0 && isDigit(event.key)) {
-    firstNumber += event.key;
-    console.log(`First Number: ${firstNumber}`); // Delete after
-  } else if (operator.length > 0 && isDigit(event.key)) {
+    handleBackspace();
+  } else if (isDigit(event.key)) {
     event.preventDefault();
-    displayContainer.value = secondNumber;
-    displayContainer.value += event.key;
-    secondNumber += event.key;
-    console.log(`Second Number: ${secondNumber}`); // Delete after
+    handleDigit(event.key);
   } else if (operatorArray.includes(event.key)) {
     event.preventDefault();
-    if (!firstNumber) return; // Make sure user inputs a number before an operator
-
-    if (operator.length > 0) {
-      operator += event.key;
-      console.log(`Current operator: ${operator[operator.length - 2]}`);
-      firstNumber = operate(
-        operator[operator.length - 2],
-        firstNumber,
-        secondNumber,
-      );
-      displayContainer.value = firstNumber;
-      secondNumber = "";
-    } else {
-      operator += event.key;
-    }
-
-    console.log(`Operator: ${operator}`); // Delete after
+    handleOperator(event.key);
   } else if (event.key === "=" || event.key === "Enter") {
     event.preventDefault();
-
-    console.log(
-      `Current operation: ${firstNumber} ${operator[operator.length - 1]} ${secondNumber}`,
-    ); // Delete after
-    let operationResult = operate(
-      operator[operator.length - 1],
-      Number(firstNumber),
-      Number(secondNumber),
-    );
-    displayContainer.value = "";
-    displayContainer.value += operationResult;
-    console.log(`Operation result: ${operationResult}`); // Delete after
+    handleEquals();
   } else if (event.key === ".") {
     event.preventDefault();
-
-    if (firstNumber && !secondNumber && !firstNumber.includes(".")) {
-      displayContainer.value += event.key;
-      firstNumber += event.key;
-      console.log(`First Number: ${firstNumber}`); // Delete after
-    } else if (secondNumber && !secondNumber.includes(".")) {
-      displayContainer.value += event.key;
-      secondNumber += event.key;
-      console.log(`Second Number: ${secondNumber}`); // Delete after
-    }
+    handleDecimal(event.key);
   }
 });
